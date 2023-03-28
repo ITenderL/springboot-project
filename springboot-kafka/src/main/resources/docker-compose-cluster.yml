@@ -1,0 +1,129 @@
+version: '2'
+
+services:
+  zoo1:
+    image: bitnami/zookeeper:3.7
+    container_name: zoo1
+    restart: always
+    hostname: zoo1
+    ports:
+      - "2181:2181"
+#    volumes:
+#      - ./zoo1/data:/bitnami/zookeeper
+#      - ./zoo1/log:/opt/bitnami/zookeeper/logs
+    environment:
+      - ZOO_SERVER_ID=1
+      - ZOO_SERVERS=zoo1:2888:3888,zoo2:2888:3888,zoo3:2888:3888
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  zoo2:
+    image: bitnami/zookeeper:3.7
+    container_name: zoo2
+    restart: always
+    hostname: zoo2
+    ports:
+      - "2182:2181"
+#    volumes:
+#      - ./zoo2/data:/bitnami/zookeeper
+#      - ./zoo2/log:/opt/bitnami/zookeeper/logs
+    environment:
+      - ZOO_SERVER_ID=2
+      - ZOO_SERVERS=zoo1:2888:3888,zoo2:2888:3888,zoo3:2888:3888
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  zoo3:
+    image: bitnami/zookeeper:3.7
+    container_name: zoo3
+    restart: always
+    hostname: zoo3
+    ports:
+      - "2183:2181"
+#    volumes:
+#      - ./zoo3/data:/bitnami/zookeeper
+#      - ./zoo3/log:/opt/bitnami/zookeeper/logs
+    environment:
+      - ZOO_SERVER_ID=3
+      - ZOO_SERVERS=zoo1:2888:3888,zoo2:2888:3888,zoo3:2888:3888
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  kafka1:
+    image: bitnami/kafka:2.8.1
+    container_name: kafka1
+    restart: always
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+    hostname: kafka1
+    ports:
+      - 9093:9093
+#    volumes:
+#      - ./kafka1:/bitnami/kafka
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zoo1:2181,zoo2:2181,zoo3:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka1:9092,EXTERNAL://localhost:9093
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+
+  kafka2:
+    image: bitnami/kafka:2.8.1
+    container_name: kafka2
+    restart: always
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+    hostname: kafka2
+    ports:
+      - 9094:9094
+#    volumes:
+#      - ./kafka2:/bitnami/kafka
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zoo1:2181,zoo2:2181,zoo3:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka2:9092,EXTERNAL://localhost:9094
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+
+  kafka3:
+    image: bitnami/kafka:2.8.1
+    container_name: kafka3
+    restart: always
+    depends_on:
+      - zoo1
+      - zoo2
+      - zoo3
+    hostname: kafka3
+    ports:
+      - 9095:9095
+#    volumes:
+#      - ./kafka3:/bitnami/kafka
+    environment:
+      - KAFKA_BROKER_ID=3
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zoo1:2181,zoo2:2181,zoo3:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+      - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9095
+      - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka3:9092,EXTERNAL://localhost:9095
+      - KAFKA_INTER_BROKER_LISTENER_NAME=CLIENT
+      - KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE=true
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop:latest
+    container_name: kafdrop
+    depends_on:
+      - kafka1
+      - kafka2
+      - kafka3
+    ports:
+      - 9000:9000
+    environment:
+      - KAFKA_BROKERCONNECT=kafka1:9092,kafka2:9092,kafka3:9092
+

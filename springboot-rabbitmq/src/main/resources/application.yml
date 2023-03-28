@@ -1,0 +1,25 @@
+server:
+  port: 8300
+spring:
+  rabbitmq:
+    port: 5672
+    host: 172.20.64.9
+    username: guest
+    password: guest
+    # 这个配置是保证提供者确保消息推送到交换机中，不管成不成功，都会回调
+    publisher-confirm-type: correlated
+    # 保证交换机能把消息推送到队列中
+    publisher-returns: true
+    virtual-host: /
+    # 这个配置是保证消费者会消费消息，手动确认，开启ack
+    listener:
+      simple:
+        acknowledge-mode: manual  # 开启手动应答
+        concurrency: 1 # 指定最小的消费者数量
+        max-concurrency: 1 # 指定最大的消费者数量
+        retry:
+          enabled: true  # 是否支持重试
+      direct:
+        acknowledge-mode: manual
+    template:
+      mandatory: true

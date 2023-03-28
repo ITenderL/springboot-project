@@ -1,0 +1,10 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: springboot-redis
+  redis:
+    host: 172.20.73.248
+    port: 6379
+#    password: root
+

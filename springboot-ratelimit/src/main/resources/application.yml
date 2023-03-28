@@ -1,0 +1,8 @@
+server:
+  port: 8300
+spring:
+  application:
+    name: springboot-ratelimit
+  redis:
+    host: 192.168.198.249
+    port: 6379

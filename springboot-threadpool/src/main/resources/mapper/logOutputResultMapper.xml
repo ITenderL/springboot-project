@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itender.threadpool.mapper.LogOutputMapper">
+
+    <insert id="bachInsert">
+        insert into `t_output_result`(`type`, `operator`, `create_time`, `update_time`) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.type}, #{item.operator}, #{item.createTime}, #{item.updateTime})
+        </foreach>
+    </insert>
+
+    <insert id="singleBachInsert">
+        insert into `t_output_result_single`(`type`, `operator`, `create_time`, `update_time`) values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.type}, #{item.operator}, #{item.createTime}, #{item.updateTime})
+        </foreach>
+    </insert>
+
+    <select id="selectByType" resultType="com.itender.threadpool.pojo.LogOutputResult">
+        SELECT * FROM t_output_result
+        <where>
+            <if test="type != null and type != ''">
+                type = #{type}
+            </if>
+            and id = #{id}
+        </where>
+    </select>
+</mapper>
