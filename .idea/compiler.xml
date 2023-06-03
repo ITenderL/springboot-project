@@ -8,20 +8,21 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="springboot-easyexcel" />
-        <module name="springboot-ratelimit" />
         <module name="springboot-kafka" />
         <module name="springboot-rabbitmq" />
         <module name="springboot-mapstruct" />
+        <module name="springboot-netty" />
         <module name="springboot-threadpool" />
         <module name="springboot-swagger" />
         <module name="springboot-redis" />
         <module name="springboot-docker" />
-        <module name="springboot-netty" />
+        <module name="springboot-ratelimit" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="springboot-dictributetransaction" target="1.8" />
       <module name="springboot-distribute-transaction" target="1.8" />
+      <module name="springboot-module" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

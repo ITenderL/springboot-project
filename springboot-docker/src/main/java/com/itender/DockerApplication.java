@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @desc 启动类
  */
 @SpringBootApplication
-public class SpringbootDockerApplication {
+public class DockerApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SpringbootDockerApplication.class, args);
+        SpringApplication.run(DockerApplication.class, args);
     }
 }

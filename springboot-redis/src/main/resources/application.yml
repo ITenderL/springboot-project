@@ -3,8 +3,24 @@ server:
 spring:
   application:
     name: springboot-redis
+  datasource:
+    name: demo
+    url: jdbc:mysql://localhost:3306/demo_01?useSSL=false&autoReconnect=true&characterEncoding=utf8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+  # mybatis相关配置
+  mybatis-plus:
+    mapper-locations: classpath:mapper/*.xml
+    configuration:
+      cache-enabled: true
+      use-generated-keys: true
+      default-executor-type: REUSE
+      use-actual-param-name: true
+      # 打印日志
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   redis:
-    host: 172.20.73.248
+    host: 172.22.154.127
     port: 6379
 #    password: root
 

@@ -1,7 +1,7 @@
 package com.itender.threadpool.service;
 
 import com.itender.threadpool.mapper.LogOutputMapper;
-import com.itender.threadpool.pojo.LogOutputResult;
+import com.itender.threadpool.entity.LogOutputResult;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
