@@ -15,6 +15,8 @@
         <module>springboot-redis</module>
         <module>springboot-easyexcel</module>
         <module>springboot-swagger</module>
+        <module>springboot-clickhouse</module>
+        <module>springcloud-gateway</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -25,13 +27,31 @@
     <groupId>com.springboot</groupId>
     <artifactId>springboot-module</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2021.0.1.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--Spring Cloud 的版本信息-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2021.0.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>6.6</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -63,5 +83,4 @@
             <version>3.4</version>
         </dependency>
     </dependencies>
-
 </project>

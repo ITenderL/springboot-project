@@ -16,7 +16,7 @@
         </foreach>
     </insert>
 
-    <select id="selectByType" resultType="com.itender.threadpool.pojo.LogOutputResult">
+    <select id="selectByType" resultType="com.itender.threadpool.entity.LogOutputResult">
         SELECT * FROM t_output_result
         <where>
             <if test="type != null and type != ''">

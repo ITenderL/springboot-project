@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: threadpoolService
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.31.25.125:8848
+        namespace: 58eed6a7-7fe3-4585-88cd-5223d1924a20  # dev环境
+        prefix: threadpoolService
+        file-extension: yaml  # 文件后缀名
+      discovery:
+        server-addr: 172.31.25.125:8848
+        namespace: 58eed6a7-7fe3-4585-88cd-5223d1924a20  # dev环境
+        #        server-addr: 172.31.25.125:8848
+        cluster-name: HZ # 杭州集群

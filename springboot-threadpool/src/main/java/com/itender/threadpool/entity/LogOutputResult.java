@@ -1,4 +1,4 @@
-package com.itender.threadpool.pojo;
+package com.itender.threadpool.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

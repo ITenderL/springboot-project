@@ -11,11 +11,14 @@ import com.alibaba.excel.util.ListUtils;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.itender.easyexcel.ExcelDataListener;
+import com.itender.easyexcel.mapper.UserMapper;
 import com.itender.easyexcel.pojo.User;
 import com.itender.easyexcel.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
@@ -30,6 +33,13 @@ import java.util.*;
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
+
+    private final UserMapper userMapper;
+
+    @Autowired
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public void exportUserInfo(ServletOutputStream outputStream) {
@@ -108,5 +118,10 @@ public class UserServiceImpl implements UserService {
             map.put("date", new Date());
             excelWriter.fill(map, writeSheet);
         }
+    }
+
+    @Override
+    public List<User> userList() {
+        return userMapper.selectList(new QueryWrapper<>());
     }
 }

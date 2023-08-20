@@ -1,0 +1,28 @@
+server:
+  port: 10010
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: gateway
+  cloud:
+    nacos:
+      discovery:
+        namespace: 58eed6a7-7fe3-4585-88cd-5223d1924a20   # dev环境
+        server-addr: 172.31.25.125:8848
+    gateway:
+      routes:
+        - id: threadpoolService  #路由id，唯一即可
+#          uri: http://127.0.0.1:8081  路由目标地址 http代表固定地址
+          uri: lb://threadpoolService # 路由地址lb代表负载均衡
+          filters:
+            - StripPrefix=1
+#            - PrefixPath=/api
+          predicates:
+            - Path=/api/user/** # 路径匹配只要以/user/开头的就符合规则
+        - id: easyexcelService
+          uri: lb://easyexcelService
+          predicates:
+            - Path=/user/**
+
+

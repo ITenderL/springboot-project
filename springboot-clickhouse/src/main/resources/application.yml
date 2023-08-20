@@ -1,0 +1,16 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    # 数据源选择
+    type: com.alibaba.druid.pool.DruidDataSource
+    # clickhouse配置
+    click:
+      driverClassName: ru.yandex.clickhouse.ClickHouseDriver
+      url: jdbc:clickhouse://172.30.98.156:8123/default
+      username: default
+      password:
+      initialSize: 10
+      maxActive: 100
+      minIdle: 10
+      maxWait: 6000

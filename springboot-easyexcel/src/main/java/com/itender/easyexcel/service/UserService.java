@@ -1,7 +1,10 @@
 package com.itender.easyexcel.service;
 
+import com.itender.easyexcel.pojo.User;
+
 import javax.servlet.ServletOutputStream;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author itender
@@ -30,4 +33,11 @@ public interface UserService {
      * @param outputStream
      */
     void fill(ServletOutputStream outputStream);
+
+    /**
+     * 查询user集合
+     *
+     * @return
+     */
+    List<User> userList();
 }

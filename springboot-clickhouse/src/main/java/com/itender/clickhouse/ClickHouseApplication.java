@@ -1,16 +1,17 @@
-package com.itender;
+package com.itender.clickhouse;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author itender
- * @date 2022/8/4 14:34
- * @desc 启动类
+ * @date 2023/6/9 16:02
+ * @desc
  */
 @SpringBootApplication
-public class SpringbootDockerApplication {
+public class ClickHouseApplication {
+
     public static void main(String[] args) {
-        SpringApplication.run(SpringbootDockerApplication.class, args);
+        SpringApplication.run(ClickHouseApplication.class, args);
     }
 }

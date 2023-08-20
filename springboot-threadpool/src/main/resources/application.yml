@@ -1,17 +1,61 @@
 server:
   port: 8400
 spring:
+#  application:
+#    name: threadpoolService
+#  cloud:
+#    nacos:
+#      discovery:
+#        namespace: 58eed6a7-7fe3-4585-88cd-5223d1924a20  # dev环境
+##        server-addr: 172.31.25.125:8848
+#        cluster-name: HZ # 杭州集群
   datasource:
-    name: demo
-    url: jdbc:mysql://localhost:3306/demo_01?useSSL=false&autoReconnect=true&characterEncoding=utf8
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
+    dynamic:
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      datasource:
+        master:
+          url: jdbc:mysql://localhost:3306/demo_01?useSSL=false&autoReconnect=true&characterEncoding=utf8
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
+        slave:
+          url: jdbc:mysql://172.31.25.125:3306/dynamic?useSSL=false&autoReconnect=true&characterEncoding=utf8
+          username: root
+          password: root
+          driver-class-name: com.mysql.cj.jdbc.Driver
+#easyexcel-service:
+#  ribbon:
+#    NFLoadBalanceRuleClassName: com.alibaba.cloud.nacos.ribbon.NacosRule
+feign:
+  client:
+    config:
+      default:
+        loggerLevel: FULL
+  httpclient:
+    enabled: true
+    max-connections: 200
+    max-connections-per-route: 50
+logging:
+  level:
+    com.itender.threadpool: debug
+ribbon:
+  eager-load:
+    enabled: true
+    clients: easyexcelService
+#logstash:
+#  address: 172.31.25.125:4560
+
+#    name: demo
+#    url: jdbc:mysql://localhost:3306/demo_01?useSSL=false&autoReconnect=true&characterEncoding=utf8
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: root
+#    password: root
 # mybatis相关配置
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   configuration:
-    cache-enabled: true
+    cache-enabled: false
     use-generated-keys: true
     default-executor-type: REUSE
     use-actual-param-name: true
