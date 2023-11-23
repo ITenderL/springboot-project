@@ -7,18 +7,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="springboot-easyexcel" />
-        <module name="springboot-ratelimit" />
-        <module name="springboot-kafka" />
+        <module name="springboot-threadpool" />
         <module name="springcloud-gateway" />
         <module name="springboot-rabbitmq" />
+        <module name="springboot-customer-starter" />
+        <module name="springboot-kafka" />
         <module name="springboot-mapstruct" />
-        <module name="springboot-threadpool" />
-        <module name="springboot-swagger" />
-        <module name="springboot-redis" />
-        <module name="springboot-docker" />
+        <module name="springboot-easyexcel" />
         <module name="springboot-netty" />
+        <module name="springboot-docker" />
         <module name="springboot-clickhouse" />
+        <module name="springboot-elasticsearch" />
+        <module name="springboot-redis" />
+        <module name="springboot-ratelimit" />
+        <module name="springboot-swagger" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -28,15 +30,18 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spring-boot-threadpool-starter" options="-parameters" />
       <module name="springboot-clickhouse" options="-parameters" />
+      <module name="springboot-customer-starter" options="-parameters" />
       <module name="springboot-dictributetransaction" options="-parameters" />
       <module name="springboot-distribute-transaction" options="-parameters" />
       <module name="springboot-docker" options="-parameters" />
       <module name="springboot-easyexcel" options="-parameters" />
+      <module name="springboot-elasticsearch" options="-parameters" />
       <module name="springboot-kafka" options="-parameters" />
       <module name="springboot-mapstruct" options="-parameters" />
-      <module name="springboot-module" options="-parameters" />
       <module name="springboot-netty" options="-parameters" />
+      <module name="springboot-project" options="-parameters" />
       <module name="springboot-rabbitmq" options="-parameters" />
       <module name="springboot-ratelimit" options="-parameters" />
       <module name="springboot-redis" options="-parameters" />

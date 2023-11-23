@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/spring-boot-threadpool-starter/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/spring-boot-threadpool-starter/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-clickhouse/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springboot-customer-starter/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-docker/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-easyexcel/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springboot-elasticsearch/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-kafka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-mapstruct/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/springboot-netty/src/main/java" charset="UTF-8" />

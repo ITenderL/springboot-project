@@ -2,4 +2,4 @@ spring:
   application:
     name: springboot-docker
 server:
-  port: 8100
+  port: 8080

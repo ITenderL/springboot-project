@@ -15,6 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class DockerController {
     @GetMapping("/{name}")
     public String hello(@PathVariable(value = "name") String name) {
-        return "Hello, " + name + "!";
+        return "Hello, " + name + "!" + "This is Docker!";
     }
 }
