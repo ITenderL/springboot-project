@@ -20,6 +20,7 @@
         <module>springboot-elasticsearch</module>
         <module>spring-boot-threadpool-starter</module>
         <module>springboot-customer-starter</module>
+        <module>springboot-starrocks</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

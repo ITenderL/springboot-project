@@ -19,6 +19,7 @@
         <module name="springboot-clickhouse" />
         <module name="springboot-elasticsearch" />
         <module name="springboot-redis" />
+        <module name="springboot-starrocks" />
         <module name="springboot-ratelimit" />
         <module name="springboot-swagger" />
       </profile>
@@ -45,6 +46,7 @@
       <module name="springboot-rabbitmq" options="-parameters" />
       <module name="springboot-ratelimit" options="-parameters" />
       <module name="springboot-redis" options="-parameters" />
+      <module name="springboot-starrocks" options="-parameters" />
       <module name="springboot-swagger" options="-parameters" />
       <module name="springboot-threadpool" options="-parameters" />
       <module name="springcloud-gateway" options="-parameters" />

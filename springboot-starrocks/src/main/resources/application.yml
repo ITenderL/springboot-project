@@ -1,0 +1,20 @@
+server:
+  port: 8800
+spring:
+  application:
+    name: starrocksService
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://172.31.25.125:9030/test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+    username: root
+    password: root
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    cache-enabled: false
+    use-generated-keys: true
+    default-executor-type: REUSE
+    use-actual-param-name: true
+logging:
+  level:
+    com.itender: debug
