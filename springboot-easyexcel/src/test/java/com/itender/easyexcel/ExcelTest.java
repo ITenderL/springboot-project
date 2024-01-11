@@ -76,7 +76,7 @@ public class ExcelTest {
      */
     @Test
     public void dynamicHeadWrite() {
-        String fileName = "D:\\workspace\\IdeaProjects\\springboot-module\\springboot-easyexcel\\src\\main\\resources\\" + System.currentTimeMillis() + ".xlsx";
+        String fileName = "D:\\workspace\\IdeaProjects\\springboot-project\\springboot-easyexcel\\src\\main\\resources\\" + System.currentTimeMillis() + ".xlsx";
         EasyExcel.write(fileName)
                 // 这里放入动态头
                 .head(head()).sheet("模板")

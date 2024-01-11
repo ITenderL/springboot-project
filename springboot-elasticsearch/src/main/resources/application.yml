@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: elasticsearch
+  elasticsearch:
+    uris: 172.25.106.224:9200
