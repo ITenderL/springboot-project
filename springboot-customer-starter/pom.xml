@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.springboot</groupId>
-            <artifactId>threadpool-spring-boot-starter</artifactId>
+            <artifactId>spring-boot-threadpool-starter</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
