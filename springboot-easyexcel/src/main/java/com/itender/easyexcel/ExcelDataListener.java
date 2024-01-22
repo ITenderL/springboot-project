@@ -16,6 +16,7 @@ import java.util.List;
  * @date 2023/1/31 12:21
  * @desc
  */
+@Getter
 @Slf4j
 public class ExcelDataListener implements ReadListener<User> {
 
@@ -31,7 +32,6 @@ public class ExcelDataListener implements ReadListener<User> {
     /**
      * 错误信息
      */
-    @Getter
     private String errorMsg;
 
     /**

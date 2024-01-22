@@ -21,6 +21,7 @@
         <module>spring-boot-threadpool-starter</module>
         <module>springboot-customer-starter</module>
         <module>springboot-starrocks</module>
+        <module>springboot-mybatis</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -74,12 +75,12 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.0.4</version>
+            <version>5.8.18</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.1-jre</version>
+            <version>23.2-android</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

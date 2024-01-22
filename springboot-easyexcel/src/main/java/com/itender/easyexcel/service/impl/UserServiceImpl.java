@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -44,18 +45,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public void exportUserInfo(ServletOutputStream outputStream) {
         // 第一种方式
-        ExcelWriter excelWriter = EasyExcelFactory.write(outputStream).build();
-        WriteSheet userSheet = EasyExcelFactory.writerSheet(0)
-                .head(User.class)
-                // 导出文件需不包含的列名
-                .excludeColumnFieldNames(Lists.newArrayList())
-                // 导出文件包含的列名
-                .includeColumnFieldNames(Lists.newArrayList())
-                .build();
-        excelWriter.write(this::getUserList, userSheet);
-        excelWriter.finish();
-        // 第二种方式
-        EasyExcelFactory.write(outputStream, User.class).sheet("userInfo").doWrite(this::getUserList);
+        try(ExcelWriter excelWriter = EasyExcelFactory.write(outputStream).build();) {
+            WriteSheet userSheet = EasyExcelFactory.writerSheet(0)
+                    .head(User.class)
+                    // 导出文件需不包含的列名
+                    .excludeColumnFieldNames(Lists.newArrayList())
+                    // 导出文件包含的列名
+                    .includeColumnFieldNames(Lists.newArrayList())
+                    .build();
+            excelWriter.write(this::getUserList, userSheet);
+            excelWriter.finish();
+            // 第二种方式
+            EasyExcelFactory.write(outputStream, User.class).sheet("userInfo").doWrite(this::getUserList);
+        }catch (Exception e) {
+            log.error("到处数据异常！error：{}，msg：{}", e, e.getMessage());
+        }
     }
 
     private List<User> getUserList() {
@@ -69,12 +73,13 @@ public class UserServiceImpl implements UserService {
     public void importUserInfo(InputStream inputStream) {
         // 第一种方式
         ExcelDataListener excelDataListener = new ExcelDataListener();
-        ExcelReader excelReader = EasyExcelFactory.read(inputStream).build();
-        ReadSheet userSheet = EasyExcelFactory.readSheet(0)
-                .head(User.class)
-                .registerReadListener(excelDataListener)
-                .build();
-        excelReader.read(userSheet);
+        try (ExcelReader excelReader = EasyExcelFactory.read(inputStream).build()) {
+            ReadSheet userSheet = EasyExcelFactory.readSheet(0)
+                    .head(User.class)
+                    .registerReadListener(excelDataListener)
+                    .build();
+            excelReader.read(userSheet);
+        }
         // 第二种方式
         EasyExcelFactory.read(inputStream, User.class, new ReadListener<User>() {
             /**

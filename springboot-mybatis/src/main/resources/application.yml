@@ -1,0 +1,78 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: springboot-mybatis
+  datasource:
+    mysql:
+      url: jdbc:mysql://127.0.0.1:3306/test?userUnicode=true&&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+      username: root
+      password: root
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # 数据源类别
+      type: com.alibaba.druid.pool.DruidDataSource
+      # 数据源其他配置
+      # 初始化数量
+      initialSize: 20
+      minIdle: 20
+      maxActive: 150
+      # 最大连接等待超时时间
+      maxWait: 6000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat
+      useGlobalDataSourceStat: true
+#    starrocks:
+#      url: jdbc:mysql://idata-starrocks-fe01-p.seeke.net:9030/product?userUnicode=true&&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&autoReconnect=true&failOverReadOnly=false
+#      username: root
+#      password: root
+#      driver-class-name: com.cj.mysql.jdbc.Driver
+#      type: com.alibaba.druid.pool.DruidDataSource
+#      # 数据源其他配置
+#      # 初始化数量
+#      initialSize: 10
+#      minIdle: 10
+#      maxActive: 30
+#      # 最大连接等待超时时间
+#      maxWait: 150000
+#      timeBetweenEvictionRunsMillis: 60000
+#      minEvictableIdleTimeMillis: 150000
+#      validationQuery: SELECT "1"
+#      testWhileIdle: true
+#      testOnBorrow: false
+#      testOnReturn: false
+#      poolPreparedStatements: true
+#      maxPoolPreparedStatementPerConnectionSize: 20
+#      filters: stat
+#      useGlobalDataSourceStat: true
+#      filter:
+#        stat:
+#          merge-sql: false
+#    greenplum:
+#      url: jdbc:postgresql://hadoop-lable-greenplum-master-inc-t.seeke.net/idata
+#      username: gpadmin
+#      password: sigo@123
+#      type: com.alibaba.druid.pool.DruidDataSource
+#      driver-class-name: org.postgresql.Driver
+#      # 数据源其他配置
+#      maxActive: 200
+#      initialSize: 1
+#      maxWait: 30000
+#      minIdle: 1
+#      timeBetweenEvictionRunsMillis: 60000
+#      minEvictableIdleTimeMillis: 300000
+#      validationQuery: select 'x'
+#      testWhileIdle: true
+#      testOnBorrow: false
+#      testOnReturn: false
+#      poolPreparedStatements: true
+#      maxOpenPreparedStatements: 20
+logging:
+  level:
+    com.itender.mybatis.mapper: debug
