@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void exportUserInfo(ServletOutputStream outputStream) {
         // 第一种方式
-        try(ExcelWriter excelWriter = EasyExcelFactory.write(outputStream).build();) {
+        try (ExcelWriter excelWriter = EasyExcelFactory.write(outputStream).build();) {
             WriteSheet userSheet = EasyExcelFactory.writerSheet(0)
                     .head(User.class)
                     // 导出文件需不包含的列名
@@ -55,11 +55,11 @@ public class UserServiceImpl implements UserService {
                     .build();
             excelWriter.write(this::getUserList, userSheet);
             excelWriter.finish();
-            // 第二种方式
-            EasyExcelFactory.write(outputStream, User.class).sheet("userInfo").doWrite(this::getUserList);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("到处数据异常！error：{}，msg：{}", e, e.getMessage());
         }
+        // 第二种方式
+        EasyExcelFactory.write(outputStream, User.class).sheet("userInfo").doWrite(this::getUserList);
     }
 
     private List<User> getUserList() {
