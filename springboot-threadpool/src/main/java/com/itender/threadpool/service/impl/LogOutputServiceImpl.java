@@ -1,8 +1,8 @@
 package com.itender.threadpool.service.impl;
 
 import com.google.common.collect.Lists;
-import com.itender.threadpool.mapper.LogOutputMapper;
 import com.itender.threadpool.entity.LogOutputResult;
+import com.itender.threadpool.mapper.LogOutputMapper;
 import com.itender.threadpool.service.AsyncService;
 import com.itender.threadpool.service.LogOutputService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.util.StopWatch;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.*;
 
 /**
  * @author itender
@@ -73,7 +73,7 @@ public class LogOutputServiceImpl implements LogOutputService {
      *
      * @return
      */
-    public List<LogOutputResult> getTestResults() {
+    public static List<LogOutputResult> getTestResults() {
         List<LogOutputResult> results = Lists.newArrayList();
         for (int i = 1; i <= 1200000; i++) {
             LogOutputResult result = new LogOutputResult();
@@ -84,9 +84,30 @@ public class LogOutputServiceImpl implements LogOutputService {
             } else if (flag == 2) {
                 type = "update";
             }
-            result.setType(type).setOperator("itender_" + i).setCreateTime(new Date()).setUpdateTime(new Date());
+            result
+                    .setType(type)
+                    .setOperator("itender_" + i)
+                    .setCreateTime(new Date())
+                    .setUpdateTime(new Date());
             results.add(result);
         }
         return results;
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException, TimeoutException {
+        CompletableFuture<String> future = CompletableFuture
+                .completedFuture("hello!")
+                .thenApply(s -> s + " world!")
+                .thenApply(s -> s + " nice!");
+        System.out.println(future.get(2, TimeUnit.SECONDS));
+
+
+        CompletableFuture<Object> future1 = CompletableFuture
+                .supplyAsync(LogOutputServiceImpl::getTestResults)
+                .thenApply(result -> {
+                    System.out.println(result.size());
+                    return result.size();
+                });
+        System.out.println(future1.get());
     }
 }

@@ -145,7 +145,6 @@ public class RabbitConfig {
             public <T, E extends Throwable> void close(RetryContext retryContext, RetryCallback<T, E> retryCallback, Throwable throwable) {
                 // 重试结束的时候调用 （最后一次重试 ）
                 System.out.println("---------------最后一次调用");
-                return;
             }
             @Override
             public <T, E extends Throwable> void onError(RetryContext retryContext, RetryCallback<T, E> retryCallback, Throwable throwable) {

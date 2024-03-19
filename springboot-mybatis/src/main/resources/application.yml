@@ -75,4 +75,4 @@ spring:
 #      maxOpenPreparedStatements: 20
 logging:
   level:
-    com.itender.mybatis.mapper: debug
+    com.itender.analytics.common.mapper: debug
