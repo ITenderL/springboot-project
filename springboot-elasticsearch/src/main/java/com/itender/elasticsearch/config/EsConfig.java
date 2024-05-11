@@ -1,6 +1,5 @@
 package com.itender.elasticsearch.config;
 
-import cn.hutool.core.text.CharSequenceUtil;
 import cn.hutool.core.util.StrUtil;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
@@ -37,14 +36,10 @@ public class EsConfig {
     @Bean
     public RestHighLevelClient getRestHighLevelClient() {
         HttpHost[] httpHosts = Arrays.stream(uris.split(","))
-                .filter(e -> !CharSequenceUtil.isEmpty(e))
-                .map(e -> new HttpHost(e, 9200, "http"))
+                .filter(StrUtil::isNotBlank)
+                .map(url -> new HttpHost(url.split(":")[0], Integer.parseInt(url.split(":")[1]), "http"))
                 .toArray(HttpHost[]::new);
-        return new RestHighLevelClient(
-                RestClient.builder(
-                        httpHosts
-                )
-        );
+        return new RestHighLevelClient(RestClient.builder(httpHosts));
     }
 
 }
