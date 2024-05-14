@@ -3,6 +3,7 @@ package com.itender.elasticsearch.config;
 import cn.hutool.core.util.StrUtil;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +40,13 @@ public class EsConfig {
                 .filter(StrUtil::isNotBlank)
                 .map(url -> new HttpHost(url.split(":")[0], Integer.parseInt(url.split(":")[1]), "http"))
                 .toArray(HttpHost[]::new);
-        return new RestHighLevelClient(RestClient.builder(httpHosts));
+        // ConnectTimeout: 设置连接超时时间，单位毫秒。SocketTimeout：请求获取数据的超时时间，单位毫秒。
+        RestClientBuilder restClientBuilder = RestClient
+                .builder(httpHosts)
+                .setRequestConfigCallback(builder ->
+                        builder.setConnectTimeout(5000)
+                                .setSocketTimeout(60000)
+                );
+        return new RestHighLevelClient(restClientBuilder);
     }
-
 }
