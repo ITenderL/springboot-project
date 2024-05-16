@@ -17,23 +17,6 @@ public class EsConfig {
     @Value("${elasticsearch.uris}")
     private String uris;
 
-    /**
-     * 高版本客户端
-     *
-     * @return
-     */
-    @Bean
-    public RestHighLevelClient restHighLevelClient() {
-        String[] split = uris.split(",");
-        HttpHost[] httpHostArray = new HttpHost[split.length];
-        for (int i = 0; i < split.length; i++) {
-            String item = split[i];
-            httpHostArray[i] = new HttpHost(item.split(":")[0], Integer.parseInt(item.split(":")[1]), "http");
-        }
-        // 创建RestHighLevelClient客户端
-        return new RestHighLevelClient(RestClient.builder(httpHostArray));
-    }
-
     @Bean
     public RestHighLevelClient getRestHighLevelClient() {
         HttpHost[] httpHosts = Arrays.stream(uris.split(","))
