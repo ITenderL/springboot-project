@@ -5,7 +5,7 @@ spring:
     name: springboot-redis
   datasource:
     name: demo
-    url: jdbc:mysql://localhost:3306/demo_01?useSSL=false&autoReconnect=true&characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/test?userUnicode=true&&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
@@ -20,7 +20,23 @@ spring:
       # 打印日志
   #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   redis:
-    host: 172.22.154.127
+    host: 192.168.117.73
     port: 6379
-#    password: root
+    password: root
+#  redis:
+#    lettuce:
+#      cluster:
+#        refresh:
+#          adaptive: true
+#          period: 10S
+#      pool:
+#        max-idle: 50
+#        min-idle: 8
+#        max-active: 100
+#        max-wait: -1
+#    timeout: 100000
+#    cluster:
+#      nodes:
+#        - 192.168.117.73:6379
+
 
