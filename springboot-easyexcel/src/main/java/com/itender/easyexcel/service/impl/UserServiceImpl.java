@@ -1,5 +1,6 @@
 package com.itender.easyexcel.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelReader;
 import com.alibaba.excel.ExcelWriter;
@@ -13,9 +14,11 @@ import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.itender.easyexcel.ExcelDataListener;
 import com.itender.easyexcel.mapper.UserMapper;
 import com.itender.easyexcel.pojo.User;
+import com.itender.easyexcel.pojo.UserUnannotated;
 import com.itender.easyexcel.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,28 +48,79 @@ public class UserServiceImpl implements UserService {
     @Override
     public void exportUserInfo(ServletOutputStream outputStream) {
         // 第一种方式
-        try (ExcelWriter excelWriter = EasyExcelFactory.write(outputStream).build();) {
-            WriteSheet userSheet = EasyExcelFactory.writerSheet(0)
-                    .head(User.class)
-                    // 导出文件需不包含的列名
-                    .excludeColumnFieldNames(Lists.newArrayList())
-                    // 导出文件包含的列名
-                    .includeColumnFieldNames(Lists.newArrayList())
-                    .build();
-            excelWriter.write(this::getUserList, userSheet);
-            excelWriter.finish();
-        } catch (Exception e) {
-            log.error("到处数据异常！error：{}，msg：{}", e, e.getMessage());
-        }
+        // try (ExcelWriter excelWriter = EasyExcelFactory.write(outputStream).build();) {
+        //     WriteSheet userSheet = EasyExcelFactory.writerSheet(0)
+        //             .head(User.class)
+        //             // 导出文件需不包含的列名
+        //             .excludeColumnFieldNames(Lists.newArrayList())
+        //             // 导出文件包含的列名
+        //             .includeColumnFieldNames(Lists.newArrayList())
+        //             .build();
+        //     excelWriter.write(this::getUserList, userSheet);
+        //     excelWriter.finish();
+        // } catch (Exception e) {
+        //     log.error("到处数据异常！error：{}，msg：{}", e, e.getMessage());
+        // }
         // 第二种方式
         EasyExcelFactory.write(outputStream, User.class).sheet("userInfo").doWrite(this::getUserList);
     }
 
+    @Override
+    public void exportUserByAnnotation(ServletOutputStream outputStream) {
+
+    }
+
+    @Override
+    public void exportUserByUnAnnotation(ServletOutputStream outputStream) {
+        try (ExcelWriter excelWriter = EasyExcelFactory.write(outputStream).build();) {
+            WriteSheet userSheet = EasyExcelFactory.writerSheet(0)
+                    .head(User.class)
+                    // 导出文件需不包含的列名
+                    .excludeColumnFieldNames(Lists.newArrayList("userName", "address"))
+                    // 导出文件包含的列名
+                    // .includeColumnFieldNames(Lists.newArrayList("id", "username", "address"))
+                    .build();
+            excelWriter.write(this::getUserUnannotatedList, userSheet);
+            excelWriter.finish();
+        } catch (Exception e) {
+            log.error("到处数据异常！error：{}，msg：{}", e, e.getMessage());
+        }
+    }
+
+    private List<UserUnannotated> getUserUnannotatedList() {
+        List<UserUnannotated> list = Lists.newArrayList();
+        for (int i = 1; i <= 100; i++) {
+            list.add(
+                    UserUnannotated.builder()
+                            .id((long) i)
+                            .userName("itender = " + i)
+                            .gender("男")
+                            .address("广东深圳 = " + i)
+                            .email("itender@163.com")
+                            .phoneNumber(13156777777L)
+                            .description("hello world = " + i)
+                            .build()
+            );
+        }
+        return list;
+    }
+
     private List<User> getUserList() {
-        return Collections.singletonList(User.builder()
-                .id(1L).userName("itender").gender("男").address("广东深圳").email("itender@163.com")
-                .phoneNumber(13156777777L).description("hello world")
-                .build());
+        List<User> list = Lists.newArrayList();
+        for (int i = 1; i <= 100; i++) {
+            list.add(
+                    User.builder()
+                            .id((long) i)
+                            .userName("itender = " + i)
+                            .gender("男")
+                            .address("广东深圳 = " + i)
+                            .email("itender@163.com")
+                            .phoneNumber(13156777777L)
+                            .description("hello world = " + i)
+                            .build()
+            );
+        }
+        return list;
     }
 
     @Override

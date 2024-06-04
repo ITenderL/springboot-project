@@ -21,6 +21,20 @@ public interface UserService {
     void exportUserInfo(ServletOutputStream outputStream);
 
     /**
+     * 导出文件-注解的方式
+     *
+     * @param outputStream
+     */
+    void exportUserByAnnotation(ServletOutputStream outputStream);
+
+    /**
+     * 导出文件-非注解的方式
+     *
+     * @param outputStream
+     */
+    void exportUserByUnAnnotation(ServletOutputStream outputStream);
+
+    /**
      * 导入文件
      *
      * @param inputStream
