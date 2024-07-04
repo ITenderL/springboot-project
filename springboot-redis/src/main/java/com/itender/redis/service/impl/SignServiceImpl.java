@@ -74,14 +74,10 @@ public class SignServiceImpl implements SignService {
         }
         // 6. 循环遍历
         Long count = 0L;
-        while (true) {
+        // 如果为0，签到结束
+        while ((num & 1) != 0) {
             // 6.1 让这个数字与1 做与运算，得到数字的最后一个bit位 判断这个数字是否为0
-            if ((num & 1) == 0) {
-                // 如果为0，签到结束
-                break;
-            } else {
-                count++;
-            }
+            count++;
             num >>>= 1;
         }
         return count;
