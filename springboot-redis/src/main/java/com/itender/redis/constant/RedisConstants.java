@@ -11,6 +11,7 @@ public class RedisConstants {
      * 签到redis存储key
      */
     public static final String USER_SIGN_KEY = "sign:";
+    public static final String COLON = ":";
 
     private RedisConstants() {
     }

@@ -1,11 +1,14 @@
 package com.itender.redis;
 
+import com.itender.redis.pojo.EstimatedArrivalDate;
 import com.itender.redis.service.RedisLockService;
+import com.itender.redis.util.DoubleCacheUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -14,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @desc
  */
 @SpringBootTest
-public class RedisLockTest {
+class RedisLockTest {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
@@ -42,6 +45,31 @@ public class RedisLockTest {
     void redissonTest1() {
         // redisLockService.redissonLock();
         new Thread(() -> redisLockService.redissonLock(), "").start();
+    }
 
+    @Test
+    void test() {
+        String elString = "#estimatedArrivalDate.city";
+        String elString2 = "#estimatedArrivalDate.deliveryDate";
+        String elString3 = "#estimatedArrivalDate.warehouseId";
+        String elString4 = "#user";
+
+        TreeMap<String, Object> map = new TreeMap<>();
+        EstimatedArrivalDate estimatedArrivalDate = new EstimatedArrivalDate();
+        estimatedArrivalDate.setCity("深圳");
+        estimatedArrivalDate.setDeliveryDate("2024-05-28");
+        estimatedArrivalDate.setWarehouseId("60");
+        map.put("estimatedArrivalDate", estimatedArrivalDate);
+        map.put("user", "Hydra");
+
+        String val = DoubleCacheUtil.parse(elString, map);
+        String val2 = DoubleCacheUtil.parse(elString2, map);
+        String val3 = DoubleCacheUtil.parse(elString3, map);
+        String val4 = DoubleCacheUtil.parse(elString4, map);
+
+        System.out.println(val);
+        System.out.println(val2);
+        System.out.println(val3);
+        System.out.println(val4);
     }
 }
