@@ -25,8 +25,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
     @DoubleCache(cacheName = "order", key = "#id",
             type = DoubleCache.CacheType.FULL)
     public Order getOrderById(Long id) {
-        return orderMapper.selectOne(new LambdaQueryWrapper<Order>()
-                .eq(Order::getId, id));
+        return orderMapper.selectById(id);
     }
 
     @DoubleCache(cacheName = "order",key = "#order.id",
