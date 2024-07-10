@@ -16,6 +16,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -78,7 +80,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
             return EstimatedArrivalDateEntity.builder().estimatedArrivalDate(value.toString()).build();
         }
         log.info("get from mysql");
-        DateTime deliveryDate = DateUtil.parse(request.getDeliveryDate(), "yyyy-MM-dd");
+        LocalDate deliveryDate = LocalDate.parse(request.getDeliveryDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         EstimatedArrivalDateEntity estimatedArrivalDateEntity = estimatedArrivalDateMapper.selectOne(new QueryWrapper<EstimatedArrivalDateEntity>()
                 .eq("delivery_date", deliveryDate)
                 .eq("warehouse_id", request.getWarehouseId())
