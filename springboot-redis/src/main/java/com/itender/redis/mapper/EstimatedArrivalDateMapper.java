@@ -1,7 +1,7 @@
 package com.itender.redis.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.itender.redis.pojo.EstimatedArrivalDate;
+import com.itender.redis.pojo.EstimatedArrivalDateEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -10,5 +10,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @description
  */
 @Mapper
-public interface EstimatedArrivalDateMapper extends BaseMapper<EstimatedArrivalDate> {
+public interface EstimatedArrivalDateMapper extends BaseMapper<EstimatedArrivalDateEntity> {
+
 }

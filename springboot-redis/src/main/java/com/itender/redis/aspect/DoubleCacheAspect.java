@@ -1,6 +1,7 @@
 package com.itender.redis.aspect;
 
 import com.github.benmanes.caffeine.cache.Cache;
+import com.google.common.collect.Lists;
 import com.itender.redis.annotation.DoubleCache;
 import com.itender.redis.constant.RedisConstants;
 import com.itender.redis.util.DoubleCacheUtil;
@@ -51,7 +52,7 @@ public class DoubleCacheAspect {
             treeMap.put(paramNames[i], args[i]);
         }
         DoubleCache annotation = method.getAnnotation(DoubleCache.class);
-        String elResult = DoubleCacheUtil.parse(annotation.key(), treeMap);
+        String elResult = DoubleCacheUtil.arrayParse(Lists.newArrayList(annotation.key()), treeMap);
         String realKey = annotation.cacheName() + RedisConstants.COLON + elResult;
         // 强制更新
         if (annotation.type() == DoubleCache.CacheType.PUT) {

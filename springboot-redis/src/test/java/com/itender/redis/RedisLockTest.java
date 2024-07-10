@@ -1,6 +1,6 @@
 package com.itender.redis;
 
-import com.itender.redis.pojo.EstimatedArrivalDate;
+import com.itender.redis.pojo.EstimatedArrivalDateEntity;
 import com.itender.redis.service.RedisLockService;
 import com.itender.redis.util.DoubleCacheUtil;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ class RedisLockTest {
         String elString4 = "#user";
 
         TreeMap<String, Object> map = new TreeMap<>();
-        EstimatedArrivalDate estimatedArrivalDate = new EstimatedArrivalDate();
+        EstimatedArrivalDateEntity estimatedArrivalDate = new EstimatedArrivalDateEntity();
         estimatedArrivalDate.setCity("深圳");
         estimatedArrivalDate.setDeliveryDate("2024-05-28");
         estimatedArrivalDate.setWarehouseId("60");

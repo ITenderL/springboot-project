@@ -1,5 +1,6 @@
 package com.itender.redis.controller;
 
+import com.itender.redis.pojo.EstimatedArrivalDateEntity;
 import com.itender.redis.pojo.Order;
 import com.itender.redis.service.DoubleCacheService;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,16 @@ public class DoubleCacheController {
 
     @Resource
     private DoubleCacheService doubleCacheService;
+
+    @PostMapping("/common")
+    public EstimatedArrivalDateEntity getEstimatedArrivalDateCommon(@RequestBody EstimatedArrivalDateEntity estimatedArrivalDate) {
+        return doubleCacheService.getEstimatedArrivalDateCommon(estimatedArrivalDate);
+    }
+
+    @PostMapping("/annotation")
+    public EstimatedArrivalDateEntity getEstimatedArrivalDate(@RequestBody EstimatedArrivalDateEntity estimatedArrivalDate) {
+        return doubleCacheService.getEstimatedArrivalDate(estimatedArrivalDate);
+    }
 
     @GetMapping("/{id}")
     public Order getOrderById(@PathVariable("id") Long id) {

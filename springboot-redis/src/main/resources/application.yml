@@ -38,5 +38,7 @@ spring:
 #    cluster:
 #      nodes:
 #        - 192.168.117.73:6379
-
+logging:
+  level:
+    com.itender.redis.mapper: debug
 

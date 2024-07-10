@@ -1,5 +1,6 @@
 package com.itender.redis.service;
 
+import com.itender.redis.pojo.EstimatedArrivalDateEntity;
 import com.itender.redis.pojo.Order;
 
 /**
@@ -31,4 +32,20 @@ public interface DoubleCacheService {
      * @param id
      */
     void deleteOrder(Long id);
+
+    /**
+     * 查询一级送达时间-常规方式
+     *
+     * @param request
+     * @return
+     */
+    EstimatedArrivalDateEntity getEstimatedArrivalDateCommon(EstimatedArrivalDateEntity request);
+
+    /**
+     * 查询一级送达时间-注解方式
+     *
+     * @param request
+     * @return
+     */
+    EstimatedArrivalDateEntity getEstimatedArrivalDate(EstimatedArrivalDateEntity request);
 }

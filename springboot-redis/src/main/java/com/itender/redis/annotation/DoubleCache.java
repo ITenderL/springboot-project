@@ -2,6 +2,11 @@ package com.itender.redis.annotation;
 
 import java.lang.annotation.*;
 
+/**
+ * @author yuanhewei
+ * @date 2024/7/9 14:51
+ * @description
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -18,7 +23,7 @@ public @interface DoubleCache {
      *
      * @return
      */
-    String key();
+    String[] key();
 
     /**
      * 过期时间，单位：秒
@@ -34,9 +39,20 @@ public @interface DoubleCache {
      */
     CacheType type() default CacheType.FULL;
 
-    public enum CacheType {
-        FULL,   //存取
-        PUT,    //只存
-        DELETE  //删除
+    enum CacheType {
+        /**
+         * 存取
+         */
+        FULL,
+
+        /**
+         * 只存
+         */
+        PUT,
+
+        /**
+         * 删除
+         */
+        DELETE
     }
 }
