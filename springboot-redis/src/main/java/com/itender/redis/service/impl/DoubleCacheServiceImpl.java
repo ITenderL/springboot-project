@@ -1,7 +1,5 @@
 package com.itender.redis.service.impl;
 
-import cn.hutool.core.date.DateTime;
-import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.itender.redis.annotation.DoubleCache;
@@ -34,7 +32,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
     private Cache<String, Object> caffeineCache;
 
     @Resource
-    private RedisTemplate<String, Object> RedisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
     private OrderMapper orderMapper;
@@ -73,7 +71,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
             log.info("get from caffeine");
             return EstimatedArrivalDateEntity.builder().estimatedArrivalDate(value.toString()).build();
         }
-        value = RedisTemplate.opsForValue().get(key);
+        value = redisTemplate.opsForValue().get(key);
         if (Objects.nonNull(value)) {
             log.info("get from redis");
             caffeineCache.put(key, value);
@@ -86,7 +84,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
                 .eq("warehouse_id", request.getWarehouseId())
                 .eq("city", request.getCity())
         );
-        RedisTemplate.opsForValue().set(key, estimatedArrivalDateEntity.getEstimatedArrivalDate(), 120, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, estimatedArrivalDateEntity.getEstimatedArrivalDate(), 120, TimeUnit.SECONDS);
         caffeineCache.put(key, estimatedArrivalDateEntity.getEstimatedArrivalDate());
         return EstimatedArrivalDateEntity.builder().estimatedArrivalDate(estimatedArrivalDateEntity.getEstimatedArrivalDate()).build();
     }
@@ -95,7 +93,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
             type = DoubleCache.CacheType.FULL)
     @Override
     public EstimatedArrivalDateEntity getEstimatedArrivalDate(EstimatedArrivalDateEntity request) {
-        DateTime deliveryDate = DateUtil.parse(request.getDeliveryDate(), "yyyy-MM-dd");
+        LocalDate deliveryDate = LocalDate.parse(request.getDeliveryDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         EstimatedArrivalDateEntity estimatedArrivalDateEntity = estimatedArrivalDateMapper.selectOne(new QueryWrapper<EstimatedArrivalDateEntity>()
                 .eq("delivery_date", deliveryDate)
                 .eq("warehouse_id", request.getWarehouseId())
