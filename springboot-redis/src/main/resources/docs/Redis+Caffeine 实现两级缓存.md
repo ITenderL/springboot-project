@@ -286,7 +286,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
     private Cache<String, Object> caffeineCache;
 
     @Resource
-    private RedisTemplate<String, Object> RedisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
     private EstimatedArrivalDateMapper estimatedArrivalDateMapper;
@@ -300,7 +300,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
             log.info("get from caffeine");
             return EstimatedArrivalDateEntity.builder().estimatedArrivalDate(value.toString()).build();
         }
-        value = RedisTemplate.opsForValue().get(key);
+        value = redisTemplate.opsForValue().get(key);
         if (Objects.nonNull(value)) {
             log.info("get from redis");
             caffeineCache.put(key, value);
@@ -313,7 +313,7 @@ public class DoubleCacheServiceImpl implements DoubleCacheService {
                 .eq("warehouse_id", request.getWarehouseId())
                 .eq("city", request.getCity())
         );
-        RedisTemplate.opsForValue().set(key, estimatedArrivalDateEntity.getEstimatedArrivalDate(), 120, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, estimatedArrivalDateEntity.getEstimatedArrivalDate(), 120, TimeUnit.SECONDS);
         caffeineCache.put(key, estimatedArrivalDateEntity.getEstimatedArrivalDate());
         return EstimatedArrivalDateEntity.builder().estimatedArrivalDate(estimatedArrivalDateEntity.getEstimatedArrivalDate()).build();
     }
