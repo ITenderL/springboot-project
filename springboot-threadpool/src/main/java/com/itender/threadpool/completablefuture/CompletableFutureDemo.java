@@ -50,7 +50,7 @@ public class CompletableFutureDemo {
         String result = stringCompletableFuture.get();
         log.info("有返回值的异步调用 supplyAsync result: {}", result);
 
-        Executor executor = new ExecutorConfig().completableExecutor();
+        Executor executor = new ExecutorConfig().customerExecutor();
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
             try {
                 TimeUnit.SECONDS.sleep(2);

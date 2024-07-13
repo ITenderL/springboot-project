@@ -34,7 +34,7 @@ public class ExecutorConfig {
 
     // 线程工厂，用于为线程池中的每条线程命名
     ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
-            .setNameFormat("visible-pool-%d")
+            .setNameFormat("customer-executor-pool-%d")
             .setUncaughtExceptionHandler((thread, throwable) -> log.error("ThreadPool {} got exception", thread, throwable))
             .build();
 
@@ -88,9 +88,9 @@ public class ExecutorConfig {
     }
 
 
-    @Bean(name = "completableFutureExecutor")
-    public Executor completableExecutor() {
-        log.info("start completableExecutor");
+    @Bean(name = "customerExecutor")
+    public Executor customerExecutor() {
+        log.info("start customerExecutor");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 核心线程数
         executor.setCorePoolSize(4);
