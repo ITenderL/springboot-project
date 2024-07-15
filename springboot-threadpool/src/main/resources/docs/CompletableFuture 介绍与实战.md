@@ -204,6 +204,7 @@ runAsync-default：ForkJoinPool.commonPool-worker-9
 - `thenApply()`
 - `thenAccept()`
 - `thenRun()`
+- `whenComplete()`
 
 将上一段任务的执行结果作为下一阶段任务的入参参与重新计算，产生新的结果。
 
@@ -298,7 +299,7 @@ System.out.println("最终结果：,thread= " + Thread.currentThread().getName()
 
 #####  3.2.2.1 功能介绍
 
-- thenAccept()
+- `thenAccept()`
 
 ``` java
 public CompletableFuture<Void> thenAccept(Consumer<? super T> action) {
@@ -313,7 +314,7 @@ public CompletableFuture<Void> thenAcceptAsync(Consumer<? super T> action,
 }
 ```
 
-- thenRun()
+- `thenRun()`
 
 ``` java
 public CompletableFuture<Void> thenRun(Runnable action) {
@@ -330,22 +331,431 @@ public CompletableFuture<Void> thenRunAsync(Runnable action,
 
 ##### 3.2.2.2 功能演示
 
+- 代码演示
+
 ``` java
+// thenAccept
+CompletableFuture<Void> thenAccept = CompletableFuture
+    .supplyAsync(() -> {
+        int result = 100;
+        System.out.println("第一次运算：" + result);
+        return result;
+    }).thenAccept(result ->
+                  System.out.println("第二次运算：" + result * 5));
+System.out.println("thenAccept = " + thenAccept.join());
+// thenRun
+CompletableFuture<Void> thenRun = CompletableFuture
+    .supplyAsync(() -> {
+        int result = 100;
+        System.out.println("第一次运算：" + result);
+        return result;
+    }).thenRun(() ->
+               System.out.println("第二次运算：不接收不处理第一次的运算结果！" ));
+System.out.println("thenRun = " + thenRun.join());
+
+```
+
+- 输出结果
+
+``` java
+第一次运算：100
+第二次运算：500
+thenAccept = null
+    
+第一次运算：100
+第二次运算：不接收不处理第一次的运算结果！
+thenRun = null
+```
+
+#### 3.2.3 `whenComplete()`
+
+##### 3.2.3.1 功能介绍
+
+当`CompletableFuture`的计算结果完成，或者抛出异常的时候，我们可以执行特定的 Action。主要是下面的方法：
+
+```java
+public CompletableFuture<T> whenComplete(
+    BiConsumer<? super T, ? super Throwable> action) {
+    return uniWhenCompleteStage(null, action);
+}
+// 使用默认线程池
+public CompletableFuture<T> whenCompleteAsync(
+    BiConsumer<? super T, ? super Throwable> action) {
+    return uniWhenCompleteStage(defaultExecutor(), action);
+}
+// 使用自定义线程池(推荐)
+public CompletableFuture<T> whenCompleteAsync(
+    BiConsumer<? super T, ? super Throwable> action, Executor executor) {
+    return uniWhenCompleteStage(screenExecutor(executor), action);
+}
+
+```
+
+##### 3.2.3.2 功能演示
+
+- 代码演示
+
+``` java
+// whenComplete 无异常
+CompletableFuture<Integer> whenComplete = CompletableFuture
+    .supplyAsync(() -> {
+        int result = 100;
+        System.out.println("第一次运算：" + result);
+        return result;
+    }).whenComplete((result, ex) ->
+                    System.out.println("第二次运算：" + result * 5));
+System.out.println("whenComplete = " + whenComplete.join());
+
+// whenComplete 异常
+CompletableFuture<Integer> whenCompleteException = CompletableFuture
+    .supplyAsync(() -> {
+        int result = 100;
+        System.out.println("第一次运算：" + result);
+        int i = 1 / 0;
+        return result;
+    }).whenComplete((result, ex) -> {
+    System.out.println("处理异常为：" + ex);
+    System.out.println("第二次运算：" + result * 5);
+}
+                   );
+System.out.println("whenCompleteException = " + whenCompleteException.join());
+```
+
+- 输出结果
+
+``` java
+第一次运算：100
+第二次运算：500
+whenComplete = 100
+    
+第一次运算：100
+处理异常为：java.util.concurrent.CompletionException: java.lang.ArithmeticException: / by zero
+Exception in thread "main" java.util.concurrent.CompletionException: java.lang.ArithmeticException: / by zero
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:273)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:280)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1592)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.exec(CompletableFuture.java:1582)
+	at java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:289)
+	at java.util.concurrent.ForkJoinPool$WorkQueue.runTask(ForkJoinPool.java:1056)
+	at java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1692)
+	at java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:157)
+Caused by: java.lang.ArithmeticException: / by zero
+	at com.itender.threadpool.completablefuture.CompletableFutureIntro.lambda$main$2(CompletableFutureIntro.java:131)
+	at java.util.concurrent.CompletableFuture$AsyncSupply.run(CompletableFuture.java:1590)
+	... 5 more
+```
+
+### 3.3 异常处理
+
+当我们采用异步操作进行任务处理时，中间如果有任务发生了异常，我们可以通过下面几种方式进行处理：
+
+- `handle()`
+
+`handle` 是执行任务完成时对结果的处理， `handle` 方法和 `thenApply` 方法处理方式大致一样，不同的是 handle 是在任务完成后再执行且Handle可以根据可以根据任务是否有异常来进行做相应的后续处理操作。
+
+- `exceptionally()`
+
+`exceptionally也可以用来处理异常，发生异常后，执行`exceptionally方法。
+
+- `whenComplete()`
+
+`whenComplete()`方法前面已经演示过了，这里就不做过多的赘述了。
+
+##### 3.3.1 功能介绍
+
+- `handle()`
+
+``` java
+public <U> CompletableFuture<U> handle(
+    BiFunction<? super T, Throwable, ? extends U> fn) {
+    return uniHandleStage(null, fn);
+}
+
+public <U> CompletableFuture<U> handleAsync(
+    BiFunction<? super T, Throwable, ? extends U> fn) {
+    return uniHandleStage(defaultExecutor(), fn);
+}
+
+public <U> CompletableFuture<U> handleAsync(
+    BiFunction<? super T, Throwable, ? extends U> fn, Executor executor) {
+    return uniHandleStage(screenExecutor(executor), fn);
+}
+
+```
+
+- `exceptionally()`
+
+``` java
+public CompletableFuture<T> exceptionally(
+        Function<Throwable, ? extends T> fn) {
+        return uniExceptionallyStage(fn);
+    }
+```
+
+##### 3.3.2 功能演示
+
+- 代码演示
+
+``` java
+// handle
+CompletableFuture<Integer> handle = CompletableFuture
+    .supplyAsync(() -> {
+        int result = 100;
+        System.out.println("第一次运算：" + result);
+        int i = 1 / 0;
+        return result;
+    }).handle((result, ex) -> {
+    System.out.println("处理异常为：" + ex.getMessage());
+    System.out.println("第二次运算：" + result * 5);
+    return result * 5;
+}
+             );
+System.out.println("handle = " + handle.join());
+
+// CompletableFuture<String> future
+//         = CompletableFuture.supplyAsync(() -> {
+//     if (true) {
+//         throw new RuntimeException("Computation error!");
+//     }
+//     return "hello!";
+// }).handle((res, ex) -> {
+//     // res 代表返回的结果
+//     // ex 的类型为 Throwable ，代表抛出的异常
+//     return res != null ? res : "world!";
+// });
+// System.out.println("future = " + future.join());
+
+// exceptionally 异常
+CompletableFuture<Integer> exceptionally = CompletableFuture
+    .supplyAsync(() -> {
+        int result = 100;
+        System.out.println("第一次运算：" + result);
+        int i = 1 / 0;
+        return result;
+    }).exceptionally(ex -> {
+    System.out.println("处理异常为：" + ex.getMessage());
+    return 100;
+}
+                    );
+System.out.println("exceptionally = " + exceptionally.join());
+```
+
+- 输出结果
+
+此处handle和exceptionally结果为分开输出的
+
+``` java
+第一次运算：100
+处理异常为：java.lang.ArithmeticException: / by zero
+Exception in thread "main" java.util.concurrent.CompletionException: java.lang.NullPointerException
+	at java.util.concurrent.CompletableFuture.encodeThrowable(CompletableFuture.java:273)
+	at java.util.concurrent.CompletableFuture.completeThrowable(CompletableFuture.java:280)
+	at java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:824)
+	at java.util.concurrent.CompletableFuture$UniHandle.tryFire(CompletableFuture.java:797)
+	at java.util.concurrent.CompletableFuture.uniHandleStage(CompletableFuture.java:837)
+	at java.util.concurrent.CompletableFuture.handle(CompletableFuture.java:2155)
+	at com.itender.threadpool.completablefuture.CompletableFutureIntro.main(CompletableFutureIntro.java:147)
+Caused by: java.lang.NullPointerException
+	at com.itender.threadpool.completablefuture.CompletableFutureIntro.lambda$main$1(CompletableFutureIntro.java:149)
+	at java.util.concurrent.CompletableFuture.uniHandle(CompletableFuture.java:822)
+	... 4 more
+    
+    
+第一次运算：100
+处理异常为：java.lang.ArithmeticException: / by zero
+exceptionally = 100
+```
+
+### 3.4 结果组合
+
+`	`提供了可以组合任务的方法。
+
+#### 3.4.1 功能介绍
+
+- `thenCombine()` 
+
+`thenCombine` 会在两个`CompletableFuture`任务都执行完成后，把两个任务的结果一块处理。
+
+``` java
+public <U,V> CompletionStage<V> thenCombine(CompletionStage<? extends U> other,BiFunction<? super T,? super U,? extends V> fn);
+
+public <U,V> CompletionStage<V> thenCombineAsync(CompletionStage<? extends U> other,BiFunction<? super T,? super U,? extends V> fn);
+
+public <U,V> CompletionStage<V> thenCombineAsync(CompletionStage<? extends U> other,BiFunction<? super T,? super U,? extends V> fn,Executor executor);
+
+```
+
+- `thenCompose()`
+
+`thenCompose` 方法允许你对两个`CompletableFuture`任务进行流水线操作，当第一个异步任务操作完成时，会将其结果作为参数传递给第二个任务。
+
+``` java
+public <U> CompletableFuture<U> thenCompose(
+    Function<? super T, ? extends CompletionStage<U>> fn) {
+    return uniComposeStage(null, fn);
+}
+
+public <U> CompletableFuture<U> thenComposeAsync(
+    Function<? super T, ? extends CompletionStage<U>> fn) {
+    return uniComposeStage(defaultExecutor(), fn);
+}
+
+public <U> CompletableFuture<U> thenComposeAsync(
+    Function<? super T, ? extends CompletionStage<U>> fn,
+    Executor executor) {
+    return uniComposeStage(screenExecutor(executor), fn);
+}
+
 ```
 
 
 
-## 四、实战应用
+#### 3.4.2 功能演示
+
+- 代码演示 `thenCombine()`
+
+``` java
+        CompletableFuture<String> helloAsync = CompletableFuture.supplyAsync(() -> {
+            System.out.println("hello 执行线程：" + Thread.currentThread().getName());
+            return "hello";
+        });
+        CompletableFuture<String> worldAsync = CompletableFuture.supplyAsync(() -> {
+            System.out.println("world 执行线程：" + Thread.currentThread().getName());
+            return "world";
+        });
+        CompletableFuture<String> thenCombine = worldAsync.thenCombine(helloAsync, (hello, world) -> {
+            System.out.println("result 执行线程：" + Thread.currentThread().getName());
+            return (hello + "," + world).toUpperCase();
+        });
+        System.out.println("获取结果 执行线程：" + Thread.currentThread().getName());
+        System.out.println("thenCombine 两个异步任务合并结果:" + thenCombine.join());
+```
+
+- 输出结果
+
+``` java
+hello 执行线程：ForkJoinPool.commonPool-worker-1
+world 执行线程：ForkJoinPool.commonPool-worker-1
+result 执行线程：main
+获取结果 执行线程：main
+thenCombine 两个异步任务合并结果:WORLD,HELLO
+```
+
+- 代码演示 `thenCompose()`
+
+``` java
+        CompletableFuture<String> thenCompose = CompletableFuture.supplyAsync(() -> {
+            System.out.println("hello 执行线程：" + Thread.currentThread().getName());
+            return "hello";
+        }).thenCompose((hello -> {
+            System.out.println("thenCompose 执行线程：" + Thread.currentThread().getName());
+            return CompletableFuture.supplyAsync((hello + "world")::toUpperCase);
+        }));
+        System.out.println("获取结果 执行线程：" + Thread.currentThread().getName());
+        System.out.println("thenCompose 两个异步任务流水线执行结果:" + thenCompose.join());
+```
+
+- 输出结果
+
+``` java
+hello 执行线程：ForkJoinPool.commonPool-worker-1
+thenCompose 执行线程：main
+获取结果 执行线程：main
+thenCompose 两个异步任务流水线执行结果:HELLOWORLD
+```
 
 
 
+### 3.5 并行运行多个 `CompletableFuture`
 
+#### 3.5.1 功能介绍
 
-## 五、总结
+`CompletableFuture` 的 `allOf()`这个静态方法来并行运行多个 `CompletableFuture`;
 
+在实际的工作中，会有很多这样的场景，比如：查询订单明细，要订单信息，订单明细，商品，sku等。四个不相关的任务可以同时独立操作查询。
 
+``` java
+public static CompletableFuture<Object> anyOf(CompletableFuture<?>... cfs)
+```
 
-## 六、参考
+#### 3.5.2 功能演示
+
+- 代码演示
+
+``` java
+long startTime = System.currentTimeMillis();
+System.out.println("startTime = " + startTime);
+CompletableFuture<String> orderFuture = CompletableFuture.supplyAsync(() -> {
+    try {
+        TimeUnit.SECONDS.sleep(2);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    System.out.println("orderFuture-查询订单信息完成！");
+    return "orderFuture-查询订单信息完成！";
+});
+CompletableFuture<String> orderDetailsFuture = CompletableFuture.supplyAsync(() -> {
+    try {
+        TimeUnit.SECONDS.sleep(2);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    System.out.println("orderDetailsFuture-查询订单明细信息完成！");
+    return "orderDetailsFuture-查询订单明细信息完成！";
+});
+CompletableFuture<String> productFuture = CompletableFuture.supplyAsync(() -> {
+    try {
+        TimeUnit.SECONDS.sleep(1);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    System.out.println("productFuture-查询商品信息完成！");
+    return "productFuture-查询商品信息完成！";
+});
+CompletableFuture<String> skuFuture = CompletableFuture.supplyAsync(() -> {
+    try {
+        TimeUnit.SECONDS.sleep(1);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    System.out.println("skuFuture-查询sku信息完成！");
+    return "skuFuture-查询sku信息完成!";
+});
+// 组合
+CompletableFuture<Void> resultFuture = CompletableFuture.allOf(orderFuture, orderDetailsFuture, productFuture, skuFuture);
+resultFuture.join();
+long endTime = System.currentTimeMillis();
+System.out.println("endTime = " + endTime);
+System.out.println("任务总耗时：" + (endTime - startTime));
+// 组合结果
+System.out.println("最终结果为：" + orderFuture.join() + "\n" + orderDetailsFuture.join() + "\n" + productFuture.join() + "\n" + skuFuture.join());
+
+```
+
+- 输出结果
+
+``` java
+startTime = 1721030494355
+skuFuture-查询sku信息完成！
+productFuture-查询商品信息完成！
+orderDetailsFuture-查询订单明细信息完成！
+orderFuture-查询订单信息完成！
+endTime = 1721030496369
+任务总耗时：2014
+最终结果为：orderFuture-查询订单信息完成！
+orderDetailsFuture-查询订单明细信息完成！
+productFuture-查询商品信息完成！
+skuFuture-查询sku信息完成!
+
+```
+
+## 四、总结
+
+本文主要讲了`CompletableFuture`的一些功能的用法和集中常用的API。`CompletableFuture`提供了灵活的异步任务处理的方式，使用起来也是比较的方便。这里要注意的是，**在使用`CompletableFuture`的时候一定要使用自定义的线程池。**如果要想深入的理解`CompletableFuture`，还要自己多用心的去学习。希望文章内容能对大家理解`CompletableFuture`有一定的帮助，有问题或好的提议也请大家指出来，大家一起学习，一起进步。
+
+纸上得来终觉浅，绝知此事要躬行。
+
+## 参考
 
 - https://blog.csdn.net/sermonlizhi/article/details/123356877?spm=1001.2014.3001.5506
 - https://blog.csdn.net/leilei1366615/article/details/119855928?spm=1001.2014.3001.5506
