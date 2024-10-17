@@ -41,6 +41,12 @@
             <artifactId>druid</artifactId>
             <version>1.2.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.itender.spi</groupId>
+            <artifactId>java-spi-interface</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
 

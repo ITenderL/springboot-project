@@ -19,16 +19,16 @@ import java.util.List;
 @RequestMapping ("/user")
 public class UserStreamController {
 
-    private final UserStreamService userStreamService;
+    // private final UserStreamService userStreamService;
 
-    @Autowired
-    public UserStreamController(UserService userService) {
-        this.userStreamService = userStreamService;
-    }
-
-    @GetMapping("/list")
-    public List<User> getUsers() {
-        // return userStreamService.getUsers();
-        return null;
-    }
+    // @Autowired
+    // public UserStreamController(UserService userService) {
+    //     this.userStreamService = userStreamService;
+    // }
+    //
+    // @GetMapping("/list")
+    // public List<User> getUsers() {
+    //     // return userStreamService.getUsers();
+    //     return null;
+    // }
 }
