@@ -5,7 +5,7 @@ spring:
     name: springboot-mybatis
   datasource:
     mysql:
-      url: jdbc:mysql://127.0.0.1:3306/test?userUnicode=true&&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
+      url: jdbc:mysql://127.0.0.1:3306/user_db?userUnicode=true&&characterEncoding=utf8&allowMultiQueries=true&useSSL=false
       username: root
       password: root
       driver-class-name: com.mysql.cj.jdbc.Driver

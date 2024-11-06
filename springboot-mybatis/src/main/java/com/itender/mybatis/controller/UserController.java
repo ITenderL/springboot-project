@@ -3,10 +3,9 @@ package com.itender.mybatis.controller;
 import com.itender.mybatis.entity.User;
 import com.itender.mybatis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,18 +14,20 @@ import java.util.List;
  * @description
  */
 @RestController
-@RequestMapping ("/user")
+@RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    @Resource
+    private  UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/list")
     public List<User> getUsers() {
         return userService.getUsers();
+    }
+
+    @PostMapping
+    public void save(@RequestBody User user) {
+        userService.saveUser(user);
     }
 }

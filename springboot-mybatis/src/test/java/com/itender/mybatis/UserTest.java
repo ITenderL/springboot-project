@@ -1,10 +1,11 @@
 package com.itender.mybatis;
 
 import com.itender.mybatis.entity.User;
-import com.itender.mybatis.mapper.mysql.UserMapper;
+import com.itender.mybatis.service.TestTransactionService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import javax.annotation.Resource;
 
 /**
  * @author yuanhewei
@@ -12,13 +13,17 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @description
  */
 @SpringBootTest
-public class UserTest {
+class UserTest {
 
-    @Autowired
-    private UserMapper userMapper;
+    @Resource
+    private TestTransactionService testTransactionService;
+
     @Test
-    public void testAdd() {
-        User user = User.builder().age(20).address("山东临沂").phone("15555555555").sex(1).name("李四").email("lisi@126.com").status(true).build();
-        userMapper.addUser(user);
+    void test() {
+        User user = new User();
+        user.setName("analytics");
+        user.setUsername("analytics");
+        user.setPassword("123456");
+        testTransactionService.saveUser(user);
     }
 }

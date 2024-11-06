@@ -20,37 +20,17 @@ public class User {
     private Integer id;
 
     /**
-     * 性别
-     */
-    private Integer sex;
-
-    /**
      * 用户名
      */
     private String name;
 
     /**
-     * 年龄
+     * 用户名
      */
-    private Integer age;
+    private String username;
 
     /**
-     * 电话
+     * 密码
      */
-    private String phone;
-
-    /**
-     * 地址
-     */
-    private String address;
-
-    /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
-     * 状态 1：有效 0：无效
-     */
-    private Boolean status;
+    private String password;
 }

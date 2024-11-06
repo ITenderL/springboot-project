@@ -33,7 +33,7 @@ public interface UserMapper {
      *
      * @param user
      */
-    void addUser(@Param("user") User user);
+    void saveUser(@Param("user") User user);
 
     /**
      * 更新用户
@@ -41,11 +41,4 @@ public interface UserMapper {
      * @param user
      */
     void updateUser(@Param("user") User user);
-
-    /**
-     * 删除用户
-     *
-     * @param id
-     */
-     void deleteById(@Param("id") Integer id);
 }

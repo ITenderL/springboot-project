@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.itender.mybatis.mapper.mysql.UserMapper">
-
     <select id="findAll" resultType="com.itender.mybatis.entity.User">
-        select id, name, sex, age, status, address, email, status from t_user
+        select id,
+               name,
+               username,
+               password
+        from t_user
     </select>
 
     <select id="findById" resultType="com.itender.mybatis.entity.User">
         select id,
                name,
-               sex,
-               age,
-               status,
-               address,
-               email,
-               status
+               username,
+               password
         from t_user
         where id = #{id}
     </select>
 
-    <select id="addUser">
-        INSERT INTO test.t_user (name, age, address, phone, email, status, sex)
-        VALUES (#{user.name}, #{user.age}, #{user.address}, #{user.phone}, #{user.email}, #{user.status}, #{user.sex})
+    <select id="saveUser">
+        INSERT INTO t_user (name, username, password)
+        VALUES (#{user.name}, #{user.username}, #{user.password})
     </select>
 
     <update id="updateUser">
+        update t_user set name = #{user.name}, username = #{user.username}, password = #{user.password} where id = #{user.id}
     </update>
-
-    <delete id="deleteById">
-        delete from t_user where id = #{id}
-    </delete>
 </mapper>

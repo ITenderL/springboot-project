@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -18,35 +19,23 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
+    @Resource
+    private UserMapper userMapper;
 
-    @Autowired
-    public UserServiceImpl(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
     @Override
     public List<User> getUsers() {
         return userMapper.findAll();
     }
 
-    @Override
-    public User getUserById(Integer id) {
-        return null;
-    }
 
     @Override
-    public void addUser(User user) {
-        userMapper.addUser(user);
+    public void saveUser(User user) {
+        userMapper.saveUser(user);
     }
 
     @Override
     public void updateUser(User user) {
-
-    }
-
-    @Override
-    public void deleteById(Integer id) {
 
     }
 }

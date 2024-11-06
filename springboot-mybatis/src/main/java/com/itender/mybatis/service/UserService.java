@@ -19,18 +19,11 @@ public interface UserService {
     List<User> getUsers();
 
     /**
-     * 根据id查询用户
-     *
-     * @param id
-     */
-    User getUserById(Integer id);
-
-    /**
      * 新增用户
      *
      * @param user
      */
-    void addUser(User user);
+    void saveUser(User user);
 
     /**
      * 更新用户
@@ -38,14 +31,4 @@ public interface UserService {
      * @param user
      */
     void updateUser(User user);
-
-    /**
-     * 删除用户
-     *
-     * @param id
-     */
-     void deleteById(Integer id);
-
-
-
 }
