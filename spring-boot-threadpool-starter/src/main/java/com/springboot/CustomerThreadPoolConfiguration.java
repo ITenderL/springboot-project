@@ -1,4 +1,4 @@
-package com.itender;
+package com.springboot;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
@@ -9,15 +9,16 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author itender
- * @date 2023/11/14/ 20:42
- * @desc
+ * @author analytics
+ * @date 2024/11/11 13:18
+ * @description
  */
 @Configuration
-public class ThreadPoolAutoConfiguration {
+public class CustomerThreadPoolConfiguration {
+
     @Bean
-    @ConditionalOnClass(ThreadPoolExecutor.class)
-    public ThreadPoolExecutor myThreadPool() {
-        return new ThreadPoolExecutor(10, 10, 10, TimeUnit.SECONDS,new ArrayBlockingQueue<>(100));
+    @ConditionalOnClass({ThreadPoolExecutor.class})
+    public ThreadPoolExecutor getThreadPoolExecutor() {
+        return new ThreadPoolExecutor(5, 10, 60L, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10));
     }
 }
