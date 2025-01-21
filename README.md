@@ -10,6 +10,7 @@
 - Mybatis Plus
 - Swagger
 - Redis
+- AOP
 - 限流
 - 线程池
 - 持续更细...
